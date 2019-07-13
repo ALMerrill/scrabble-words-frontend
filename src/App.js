@@ -5,7 +5,7 @@ import LetterForm from "./LetterForm/Form";
 function App() {
   return (
     <div className="App">
-      <h2>Scrabble definition generator</h2>
+      <h2>Scrabble Definition Generator</h2>
       <LetterForm />
     </div>
   );
