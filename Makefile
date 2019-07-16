@@ -10,7 +10,7 @@ build:
 	@docker tag ${IMG} ${LATEST}
 
 run:
-	@docker run -v ${PWD}:/app -v /app/node_modules -p 3000:80 ${LATEST}
+	@docker run -v ${PWD}:/app -v /app/node_modules -p 3000:3000 ${LATEST}
 
 push:
 	@docker push ${NAME}
