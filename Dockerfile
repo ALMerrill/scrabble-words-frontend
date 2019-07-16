@@ -1,10 +1,10 @@
-FROM node:12.2.0-alpine
-
+FROM node:12.2.0-alpine AS builder
 WORKDIR /app
+COPY . .
+RUN yarn run build
 
-ENV PATH /app/node_modules/.bin:$PATH
-
-COPY package.json /app/package.json
-RUN yarn
-
-CMD ["yarn", "start"]
+FROM node:12.2.0-alpine
+RUN yarn global add serve
+WORKDIR /app
+COPY --from=builder /app/build .
+CMD ["serve", "-p", "80", "-s", "."]
