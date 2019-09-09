@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import LetterForm from "./LetterForm/Form";
+import LetterForm from "./LetterForm/Form.tsx";
 
 function App() {
   return (
