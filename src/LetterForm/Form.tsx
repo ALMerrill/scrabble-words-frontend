@@ -2,12 +2,20 @@ import React from "react";
 import "./Form.css";
 
 type State = {
-  letters: string;
   definition: string;
 };
 
+type Props = {};
+
 class LetterForm extends React.Component {
-  state: State = { letters: "", definition: "" };
+  state: State;
+  private letters: React.RefObject<HTMLInputElement>;
+
+  constructor(props: Props) {
+    super(props);
+    this.state = { definition: "" };
+    this.letters = React.createRef();
+  }
 
   render() {
     return (
@@ -20,9 +28,9 @@ class LetterForm extends React.Component {
           <label>
             <input
               type="text"
-              onChange={this.handleChange}
               name="letters"
               placeholder="Scrabble letters"
+              ref={this.letters}
             />
           </label>
           <input type="submit" value="Submit" />
@@ -32,17 +40,16 @@ class LetterForm extends React.Component {
     );
   }
 
-  handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ letters: e.target.value });
-  };
-
   getDefinition = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    if (!this.letters.current) {
+      return;
+    }
     const requestHeaders: HeadersInit = new Headers();
     requestHeaders.set("Content-Type", "application/json");
     requestHeaders.set("crossDomain", "true");
     const api = `http://localhost:4000/api/nearest-neighbor?word=${
-      this.state.letters
+      this.letters.current.value
     }&N=${10}`;
     fetch(api, {
       method: "get",
