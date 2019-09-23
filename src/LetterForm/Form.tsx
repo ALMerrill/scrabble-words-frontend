@@ -1,9 +1,12 @@
 import React from "react";
 import "./Form.css";
+import ReactLoading from "react-loading";
+import "./Form.css";
 
 type State = {
   word: string;
   definition: string;
+  loading: boolean;
 };
 
 type Props = {};
@@ -14,7 +17,7 @@ class LetterForm extends React.Component {
 
   constructor(props: Props) {
     super(props);
-    this.state = { word: "", definition: "" };
+    this.state = { word: "", definition: "", loading: false };
     this.letters = React.createRef();
   }
 
@@ -31,12 +34,23 @@ class LetterForm extends React.Component {
               type="text"
               name="letters"
               placeholder="Scrabble letters"
+              maxLength={7}
               ref={this.letters}
             />
           </label>
           <input type="submit" value="Submit" />
         </form>
-        {this.state.word && `${this.state.word}: ${this.state.definition}`}
+        <div className="result">
+          {this.state.loading && (
+            <ReactLoading
+              type={"spinningBubbles"}
+              color={"#ffffff"}
+              height={150}
+              width={80}
+            />
+          )}
+          {this.state.word && `${this.state.word}: ${this.state.definition}`}
+        </div>
       </>
     );
   }
@@ -50,6 +64,7 @@ class LetterForm extends React.Component {
     requestHeaders.set("Content-Type", "application/json");
     requestHeaders.set("crossDomain", "true");
     const api = `http://localhost:4000/api/definition?letters=${this.letters.current.value}`;
+    this.setState({ word: "", definition: "", loading: true });
     fetch(api, {
       method: "get",
       mode: "cors",
@@ -61,6 +76,7 @@ class LetterForm extends React.Component {
           .split(" ")
           .map((s: string) => s.charAt(0).toUpperCase() + s.substring(1))
           .join(" ");
+        this.setState({ loading: false });
         this.setState({
           definition: json_result["definition"],
           word: word
