@@ -49,7 +49,9 @@ class LetterForm extends React.Component {
               width={80}
             />
           )}
-          {this.state.word && `${this.state.word}: ${this.state.definition}`}
+          {this.state.word && (
+            <Result word={this.state.word} definition={this.state.definition} />
+          )}
         </div>
       </>
     );
@@ -87,5 +89,19 @@ class LetterForm extends React.Component {
       });
   };
 }
+
+const Result = (props: { word: string; definition: string }) => (
+  <div className="w3-container">
+    <div className="w3-card-4">
+      <header className="w3-container w3-blue">
+        <h1>{props.word}</h1>
+      </header>
+
+      <div className="w3-container">
+        <p>{props.definition}</p>
+      </div>
+    </div>
+  </div>
+);
 
 export default LetterForm;
